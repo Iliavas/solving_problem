@@ -1,5 +1,6 @@
 from typing import Callable, List
 import tkinter as tk
+import tkinter.scrolledtext as s
 
 class Generator:
     def __init__(self, commands: List[Callable], start: int):
@@ -39,7 +40,47 @@ class Generator:
 class R:
     def __init__(self, master):
         self.master = master
-        super().__init__()
+        self.create_button = tk.Button(text='generate', width=20, command=self.get_solving)
+        self.input_start = tk.Label(text='введи начальное число')
+        self.input_start_input = tk.Entry()
+        self.command_count = tk.Label(text='сколько команд')
+        self.command_count_input = tk.Entry()
+        self.target = tk.Label(text='Какое число получить')
+        self.target_input = tk.Entry()
+        self.get_comm = tk.Label(text='введи команды каждую на своей строке вида x + 1 или x ** 2')
+        self.get_comm_input = s.ScrolledText(height=5)
+        self.result = tk.Label(text='результат (заполнять не нужно) программа сюда вставит последовательность номеров '
+                                    'команд')
+        self.result_inp = tk.Entry()
+
+
+        self.input_start.pack()
+        self.input_start_input.pack()
+        self.command_count.pack()
+        self.command_count_input.pack()
+        self.target.pack()
+        self.target_input.pack()
+        self.get_comm.pack()
+        self.get_comm_input.pack()
+
+        self.result.pack()
+        self.result_inp.pack()
+
+        self.create_button.pack()
+
+    def get_solving(self):
+        first_n = int(self.input_start_input.get())
+        c_comm = int(self.command_count_input.get())
+        target_v = int(self.target_input.get())
+        commands = self.parsing(self.get_comm_input.get('1.0', tk.END).split('\n'))
+        gen = Generator(commands, first_n)
+        self.printing(gen(c_comm, target_v))
+
+    def parsing(self, l: List[str]) -> List[Callable]:
+        return [eval('lambda x: {}'.format(i)) for i in l if i != '']
+    def printing(self, string):
+        self.result_inp.insert(0, string)
+
 
 
 # HOWTO USE
