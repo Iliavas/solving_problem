@@ -79,6 +79,7 @@ class R:
     def parsing(self, l: List[str]) -> List[Callable]:
         return [eval('lambda x: {}'.format(i)) for i in l if i != '']
     def printing(self, string):
+        self.result_inp.delete('1.0', tk.END)
         self.result_inp.insert(0, string)
 
 
